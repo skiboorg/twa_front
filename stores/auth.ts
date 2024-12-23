@@ -1,4 +1,5 @@
 import nuxtStorage from 'nuxt-storage';
+import { useToast } from 'primevue/usetoast';
 
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast()
