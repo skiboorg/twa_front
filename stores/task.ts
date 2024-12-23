@@ -1,7 +1,7 @@
 import type {Task} from "nitropack";
 
 export const useTaskStore = defineStore('task', () => {
-    const toast = useToast()
+
     const {$api} = useNuxtApp()
     const filters = ref([])
     const loading = ref(false)
