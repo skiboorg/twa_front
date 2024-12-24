@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="h-[80vh] overflow-y-auto ">
+  <div class="h-[87vh] overflow-y-auto ">
     <slot></slot>
   </div>
 

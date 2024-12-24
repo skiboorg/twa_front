@@ -11,7 +11,7 @@ const formattedDate = dayjs(props.task.created_at).fromNow();
 </script>
 
 <template>
-  <div class="rounded-2xl bg-white p-4" @click="navigateTo(`/task/${task.id}`)">
+  <div class="rounded-2xl bg-white p-4 w-full" @click="navigateTo(`/task/${task.id}`)">
     <p class="font-medium mb-1">{{task.name}}</p>
     <p class="text-gray-400 text-xs font-medium mb-3">{{formattedDate}}</p>
 
@@ -32,7 +32,10 @@ const formattedDate = dayjs(props.task.created_at).fromNow();
         <p class=" font-medium text-xs flex gap-2 items-center">{{task.level?.name}}</p>
       </div>
     </div>
-    <p class="text-gray-400 text-sm">{{task.short_description}}</p>
+    <p class="text-gray-400 text-sm mb-3">{{task.short_description}}</p>
+    <p v-if="task.in_work" class="text-white text-xs bg-primary px-2 py-1 rounded-2xl inline-block">В работе</p>
+    <p v-if="task.in_review" class="text-white text-xs bg-orange-300 px-2 py-1 rounded-2xl inline-block">На проверке</p>
+    <p v-if="task.is_done" class="text-white text-xs bg-green-500 px-2 py-1 rounded-2xl inline-block">Завершена</p>
 
   </div>
 </template>

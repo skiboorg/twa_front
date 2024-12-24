@@ -3,8 +3,8 @@
 </script>
 
 <template>
-<footer class="fixed bottom-0 border-t w-full bg-white">
-  <div class="container">
+<footer class="fixed h-[13vh] border-t w-full bg-white">
+
     <div class="flex items-center justify-evenly pt-2 pb-6">
         <nuxt-link exact-active-class="footer-link-active" class="footer-link flex flex-col items-center justify-center gap-1" to="/tasks">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@
       </nuxt-link>
 
     </div>
-  </div>
+
 
 </footer>
 </template>

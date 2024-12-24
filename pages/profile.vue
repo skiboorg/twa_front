@@ -52,7 +52,7 @@ const socialAction = async (action,id=null)=>{
 
 
   <p class="font-medium text-left mb-3">Подключенные аккаунты</p>
-  <div class="bg-white p-4 rounded-2xl">
+  <div class="bg-white p-4 rounded-2xl mb-3">
 
     <div class="flex items-center gap-3 border-b mb-2 pb-2" v-for="service in user?.social" :key="service.id">
 
@@ -78,7 +78,13 @@ const socialAction = async (action,id=null)=>{
       <Button :disabled="!service || !link" fluid :loading="loading" @click="socialAction('add')" label="Добавить"/>
     </div>
   </div>
-  
+  <p class="font-medium text-left mb-3">Mой баланс</p>
+  <div class="bg-white p-4 rounded-2xl mb-3">
+    <p class="mb-2">Кошелек TON</p>
+    <InputText class="mb-4" fluid v-model="user.wallet" placeholder="Кошелек TON"/>
+    <p class="opacity-50 text-xs">Вывод средств осуществляется после отправления ваши запросы на вывод, минимальная сумма вывода - от 1000 Coin (~150$, 10 TON)</p>
+  </div>
+
 </div>
 </template>
 

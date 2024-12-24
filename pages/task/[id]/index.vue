@@ -4,6 +4,7 @@ const taskStore = useTaskStore()
 const {loading} = storeToRefs(taskStore)
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
+const {me} = authStore
 const {$api} = useNuxtApp()
 import { useToast } from 'primevue/usetoast';
 const toast = useToast()
@@ -69,9 +70,10 @@ const submitForm = async () => {
         'Content-Type': 'multipart/form-data',
       }}
     )
-  task.value = await getTask(route.params.id)
+  await me()
   send.value=false
-
+  toast.add({severity: 'success', summary: 'Задача отдана на проверку!',life: 3000, detail:'После проверки исполнения задачи модератором задача будет принята или отдана вам на доработку'})
+  navigateTo('/tasks/own')
 
 }
 
@@ -79,8 +81,11 @@ const submitForm = async () => {
 
 <template>
 <div v-if="!show_verify_form" class="container bg-white h-screen">
+  <div class="flex items-center gap-3 flex-wrap mb-2">
+    <Button @click="$router.back()" size="small"  outlined security="secodary" icon="pi pi-arrow-left"/>
+    <p class="font-medium mb-1">{{task.name}}</p>
+  </div>
 
-  <p class="font-medium mb-1">{{task.name}}</p>
   <p class="text-gray-400 text-xs font-medium mb-3">{{formattedDate}}</p>
 
   <div class="flex items-center gap-3 mb-4">

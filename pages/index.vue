@@ -7,14 +7,19 @@ definePageMeta({
 const authStore = useAuthStore()
 const {login,createPassword,me} = authStore
 const {authData,loading} = storeToRefs(authStore)
-
+const is_loading = ref(false)
 
 const pinEntered = async (pin)=>{
+  is_loading.value = true
   const result = await login({tg_id:authData.value.tg_id, password:pin})
   if (result.success){
     await me()
     navigateTo('/tasks')
+  }else {
+    is_loading.value = false
   }
+
+
 }
 const newPinEntered = async (pin)=>{
   await createPassword({tg_id:authData.value.tg_id, password:pin})
@@ -27,8 +32,7 @@ const newPinEntered = async (pin)=>{
 
 <template>
   <div class="container">
-    {{loading}}
-    <div v-if="loading" class="z-10 bg-zinc-500 bg-blend-darken absolute left-0 top-0 w-full h-full flex items-center justify-center">
+    <div v-if="is_loading" class="z-10 bg-zinc-500 bg-blend-darken absolute left-0 top-0 w-full h-full flex items-center justify-center">
       <i class="pi pi-spin pi-cog text-white" style="font-size: 2rem"></i>
     </div>
     <div v-if="authData.status==='exists'" class="h-screen flex items-center justify-center">

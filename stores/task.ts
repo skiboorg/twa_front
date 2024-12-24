@@ -26,8 +26,8 @@ export const useTaskStore = defineStore('task', () => {
         const { data } = await $api.post(`/api/task/take`,{id});
         await me()
         loading.value = false
-        toast.add({severity: 'info',life:1000, summary: 'Результат', detail:data.message})
-        return data
+        toast.add({severity: 'info',life:3000, summary: 'Результат', detail:data.message})
+        navigateTo('/tasks/own')
     }
     const getTasks = async (filters) => {
         loading.value = true
