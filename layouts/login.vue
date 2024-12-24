@@ -3,7 +3,10 @@
 </script>
 
 <template>
-  <slot></slot>
+
+    <slot></slot>
+
+
   <Toast position="bottom-right"/>
 </template>
 

@@ -2,10 +2,12 @@ import nuxtStorage from 'nuxt-storage';
 import { useToast } from 'primevue/usetoast';
 
 export const useAuthStore = defineStore('auth', () => {
+
     const toast = useToast()
     const {$api} = useNuxtApp()
     const user = ref(null)
     const authData = ref({})
+    const social_services = ref([])
 
     const loading = ref(false)
 
@@ -66,5 +68,18 @@ export const useAuthStore = defineStore('auth', () => {
         loading.value = false
     }
 
-    return { user,isLoggedIn,loading,authData, login,checkUser,me,update,createPassword }
+    const social_action = async (payload)=> {
+        loading.value = true
+        await $api.post(`/api/user/social_action`,{...payload})
+        loading.value = false
+    }
+
+    const get_social_services = async ()=> {
+
+        const response = await $api('/api/user/social_services')
+        social_services.value = response.data
+
+    }
+
+    return { user,isLoggedIn,loading,authData,social_services, login,checkUser,me,update,createPassword,get_social_services,social_action }
 })

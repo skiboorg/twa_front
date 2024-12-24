@@ -40,7 +40,7 @@ export default defineNuxtPlugin(async (nuxtApp):Promise<any> => {
     console.log(userData)
 
     await checkUser(userData)
-
+    console.log('init auth_token',auth_token)
     if (auth_token){
         await authStore.me()
     }

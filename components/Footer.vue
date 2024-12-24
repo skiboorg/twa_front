@@ -19,7 +19,7 @@
 
         <p class="text-xs font-bold">Задания</p>
       </nuxt-link>
-      <nuxt-link exact-active-class="footer-link-active" class="footer-link flex flex-col items-center justify-center gap-1" to="/tasks/own">
+      <nuxt-link exact-active-class="footer-link-active" class="footer-link flex flex-col items-center justify-center gap-1" to="/profile">
         <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1763 6.50615C16.1763 9.93268 13.429 12.6802 10 12.6802C6.57224 12.6802 3.8237 9.93268 3.8237 6.50615C3.8237 3.07961 6.57224 0.333252 10 0.333252C13.429 0.333252 16.1763 3.07961 16.1763 6.50615ZM10 23.6666C4.93946 23.6666 0.666687 22.8441 0.666687 19.6707C0.666687 16.4962 4.9663 15.7028 10 15.7028C15.0618 15.7028 19.3334 16.5253 19.3334 19.6987C19.3334 22.8732 15.0337 23.6666 10 23.6666Z" />
         </svg>

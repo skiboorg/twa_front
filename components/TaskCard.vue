@@ -11,7 +11,7 @@ const formattedDate = dayjs(props.task.created_at).fromNow();
 </script>
 
 <template>
-  <div class="rounded-2xl bg-white p-4" @click="navigateTo(`/tasks/${task.id}`)">
+  <div class="rounded-2xl bg-white p-4" @click="navigateTo(`/task/${task.id}`)">
     <p class="font-medium mb-1">{{task.name}}</p>
     <p class="text-gray-400 text-xs font-medium mb-3">{{formattedDate}}</p>
 

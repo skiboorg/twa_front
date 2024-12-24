@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-const authStore = useAuthStore()
+
 const taskStore = useTaskStore()
-const {user} = storeToRefs(authStore)
+
 const {filters,loading} = storeToRefs(taskStore)
 const {getFilters, getTasks} = taskStore
 const tasks = ref([])
@@ -17,10 +17,12 @@ const fetchTasks = async (filters)=>{
     tasks.value = await getTasks(filters)
 }
 
+
+
 </script>
 
 <template>
-  <div class="container h-[90vh] overflow-y-auto">
+  <div class="container ">
     <p class="font-medium text-2xl mb-4">Биржа задач</p>
 
     <div class="flex items-center gap-2 overflow-x-auto mb-4">

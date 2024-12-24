@@ -2,8 +2,19 @@
 const route = useRoute()
 const taskStore = useTaskStore()
 const {loading} = storeToRefs(taskStore)
-const {getTask} = taskStore
+const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
+const {$api} = useNuxtApp()
+import { useToast } from 'primevue/usetoast';
+const toast = useToast()
+const {getTask, takeTask} = taskStore
 const task = ref({})
+const show_verify_form = ref(false)
+const send = ref(false)
+const comment = ref(null)
+const files = ref([])
+const link = ref(null)
+const links = ref([])
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ru';
@@ -16,10 +27,59 @@ onBeforeMount(async ()=>{
   task.value = await getTask(route.params.id)
   formattedDate = dayjs(task.value.created_at).fromNow();
 })
+
+const user_have_is_task = computed (()=>{
+ return !!user.value.tasks?.find(t => t.task.id === task.value.id);
+})
+
+
+
+const fileSelected = (e) => {
+  files.value.push(e.files[0])
+  console.log(files.value)
+}
+
+const removeFile = (index)=>{
+  files.value.splice(index,1)
+}
+const addLink = ()=>{
+  links.value.push(link.value)
+  link.value = null
+}
+const removeLink = (index)=>{
+  links.value.splice(index,1)
+}
+
+const submitForm = async () => {
+  send.value=true
+  const formData = new FormData()
+  formData.append('comment', comment.value)
+  formData.append('id', task.value.id)
+
+  links.value.forEach(link => {
+    formData.append('links', link)
+  })
+  files.value.forEach(file => {
+    formData.append('files', file)
+  })
+
+
+    const { data } = await $api.post('/api/task/verify', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }}
+    )
+  task.value = await getTask(route.params.id)
+  send.value=false
+
+
+}
+
 </script>
 
 <template>
-<div class="container bg-white h-screen">
+<div v-if="!show_verify_form" class="container bg-white h-screen">
+
   <p class="font-medium mb-1">{{task.name}}</p>
   <p class="text-gray-400 text-xs font-medium mb-3">{{formattedDate}}</p>
 
@@ -77,9 +137,49 @@ onBeforeMount(async ()=>{
     </a>
   </div>
 
-  <Button class="mt-4" fluid label="Откликнуться"/>
+  <Button v-if="!user_have_is_task" class="mt-4" :loading="loading" fluid label="Откликнуться" @click="takeTask(task.id)"/>
+  <Button v-if="!task.in_review" class="mt-4" severity="success" :loading="loading" fluid label="Сдать на проверку" @click="show_verify_form = true"/>
 
 </div>
+  <div class="container bg-white  mb-2" v-else>
+    <p class="font-medium">Написать комментарий</p>
+    <Textarea v-model="comment" fluid rows="6"/>
+    <p class="font-medium mb-2">Прикрепить файлы</p>
+    <p  class="border rounded-xl p-3 flex items-center justify-between mb-2" v-for="(file,index) in files" :key="index">
+      <p class="flex items-center gap-2">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#F2F5F8"/>
+          <g clip-path="url(#clip0_77_2294)">
+            <path d="M22.2933 15.3668L16.1667 21.4934C15.4161 22.244 14.3981 22.6657 13.3367 22.6657C12.2752 22.6657 11.2572 22.244 10.5067 21.4934C9.7561 20.7429 9.33444 19.7249 9.33444 18.6634C9.33444 17.602 9.7561 16.584 10.5067 15.8334L16.6333 9.70678C17.1337 9.2064 17.8124 8.92529 18.52 8.92529C19.2276 8.92529 19.9063 9.2064 20.4067 9.70678C20.907 10.2072 21.1881 10.8858 21.1881 11.5934C21.1881 12.3011 20.907 12.9797 20.4067 13.4801L14.2733 19.6068C14.0231 19.857 13.6838 19.9975 13.33 19.9975C12.9762 19.9975 12.6369 19.857 12.3867 19.6068C12.1365 19.3566 11.9959 19.0173 11.9959 18.6634C11.9959 18.3096 12.1365 17.9703 12.3867 17.7201L18.0467 12.0668" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <defs>
+            <clipPath id="clip0_77_2294">
+              <rect width="16" height="16" fill="white" transform="translate(8 8)"/>
+            </clipPath>
+          </defs>
+        </svg>
+        <span>{{file.name}}</span>
+      </p>
+      <i class="pi pi-trash" @click="removeFile(index)"></i>
+
+    </p>
+    <FileUpload  mode="basic" chooseLabel="Прикрепите файл" class=" py-2 w-full mb-4" accept="image/*" @select="fileSelected"/>
+
+    <p class="font-medium mb-2">Прикрепить ссылки</p>
+    <p  class="border rounded-xl p-3 flex items-center justify-between mb-2" v-for="(link,index) in links" :key="index">
+      <p class="flex items-center gap-2">
+        <span>{{link}}</span>
+      </p>
+      <i class="pi pi-trash" @click="removeLink(index)"></i>
+
+    </p>
+    <div class="flex gap-3 mb-4">
+      <InputText class="grow" v-model="link" />
+      <Button   @click="addLink" icon="pi pi-plus"/>
+    </div>
+    <Button :loading="send" fluid severity="success" @click="submitForm" label="ОТПРАВИТЬ"/>
+
+  </div>
 </template>
 
 <style scoped>
