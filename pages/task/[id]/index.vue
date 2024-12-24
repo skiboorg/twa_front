@@ -138,7 +138,10 @@ const submitForm = async () => {
   </div>
 
   <Button v-if="!user_have_is_task" class="mt-4" :loading="loading" fluid label="Откликнуться" @click="takeTask(task.id)"/>
-  <Button v-if="!task.in_review" class="mt-4" severity="success" :loading="loading" fluid label="Сдать на проверку" @click="show_verify_form = true"/>
+  <div v-else>
+    <Button v-if="!task.in_review" class="mt-4" severity="success" :loading="loading" fluid label="Сдать на проверку" @click="show_verify_form = true"/>
+  </div>
+
 
 </div>
   <div class="container bg-white  mb-2" v-else>
