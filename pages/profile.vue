@@ -2,11 +2,12 @@
 const authStore = useAuthStore()
 
 const {user,social_services} = storeToRefs(authStore)
-const {get_social_services,social_action, loading, me} = authStore
+const {get_social_services,social_action, loading, me, update,withdrawal_request} = authStore
 
 const need_add_link = ref(false)
 const service = ref(null)
 const link = ref(null)
+const amount = ref(null)
 onBeforeMount(async ()=>{
   await get_social_services()
 })
@@ -20,9 +21,9 @@ const socialAction = async (action,id=null)=>{
     await social_action({action, id})
   }
   await me()
-
-
 }
+
+
 </script>
 
 
@@ -81,8 +82,15 @@ const socialAction = async (action,id=null)=>{
   <p class="font-medium text-left mb-3">Mой баланс</p>
   <div class="bg-white p-4 rounded-2xl mb-3">
     <p class="mb-2">Кошелек TON</p>
-    <InputText class="mb-4" fluid v-model="user.wallet" placeholder="Кошелек TON"/>
+    <InputText class="mb-2" fluid v-model="user.wallet" placeholder="Кошелек TON" @keydown="handleKey"/>
+    <Button fluid class="mb-4" :disabled="!user.wallet" label="Сохранить" @click="update({wallet:user.wallet})"/>
     <p class="opacity-50 text-xs">Вывод средств осуществляется после отправления ваши запросы на вывод, минимальная сумма вывода - от 1000 Coin (~150$, 10 TON)</p>
+  </div>
+  <p class="mb-2">Вывод средств</p>
+  <div class="bg-white p-4 rounded-2xl mb-3">
+    <InputNumber class="mb-2" fluid v-model="amount" placeholder="Сумма вывода"/>
+
+    <Button fluid :disabled="!(parseInt(amount) >= 1000)"  label="Отправить заявку" @click="withdrawal_request(amount)"/>
   </div>
 
 </div>

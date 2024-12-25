@@ -21,7 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await $api.post('/auth/token/login/',{...payload})
 
             console.log(response.data.auth_token)
-            nuxtStorage.localStorage.setData('auth_token', response.data.auth_token);
+
+            nuxtStorage.localStorage.setData('auth_token', response.data.auth_token, 30, 'd');
             result.success = true
             loading.value = false
             return result
@@ -40,12 +41,24 @@ export const useAuthStore = defineStore('auth', () => {
         console.log(payload)
         await $api.patch(`/api/user/update`,{...payload})
         await me()
-        toast.add({ severity: 'success',summary:'Success', detail: 'User updated', life: 3000 });
+        toast.add({ severity: 'success',summary:'Успешно', detail: 'Данные пользователя обновлены', life: 3000 });
 
     }
 
+    const withdrawal_request = async (amount)=> {
+        const {data} = await $api.post(`/api/user/new_request`,{amount})
+
+        if(data.success){
+            await me()
+            toast.add({ severity: 'success',summary:'Успешно', detail: 'Запрос на вывод отправлен', life: 3000 })
+        }
+        else {
+            toast.add({ severity: 'error',summary:'Ошибка', detail: 'Запрос на вывод не отправлен', life: 3000 })
+        }
+
+    }
     const createPassword = async (payload)=> {
-        delete payload.orders
+
         await $api.post(`/api/user/create_password`,{...payload})
         authData.value.status = 'exists'
 
@@ -81,5 +94,5 @@ export const useAuthStore = defineStore('auth', () => {
 
     }
 
-    return { user,isLoggedIn,loading,authData,social_services, login,checkUser,me,update,createPassword,get_social_services,social_action }
+    return { user,isLoggedIn,loading,authData,social_services, login,checkUser,me,update,createPassword,get_social_services,social_action,withdrawal_request }
 })
