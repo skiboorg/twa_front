@@ -88,9 +88,10 @@ const socialAction = async (action,id=null)=>{
   </div>
   <p class="mb-2">Вывод средств</p>
   <div class="bg-white p-4 rounded-2xl mb-3">
-    <InputNumber class="mb-2" fluid v-model="amount" placeholder="Сумма вывода"/>
 
-    <Button fluid :disabled="!(parseInt(amount) >= 1000)"  label="Отправить заявку" @click="withdrawal_request(amount)"/>
+    <Select fluid class="mb-2" v-model="amount" :options="[1000,2000,3000,5000,10000]" placeholder="Выберите сумму вывода"/>
+
+    <Button fluid :disabled="!amount"  label="Отправить заявку" @click="withdrawal_request(amount)"/>
   </div>
 
 </div>

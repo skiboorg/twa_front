@@ -11,6 +11,7 @@ export default defineNuxtPlugin(async (nuxtApp):Promise<any> => {
     const route = useRoute();
 
     const parseHashData = () => {
+        console.log(route.fullPath)
         const hash = route.hash;
 
         if (hash) {

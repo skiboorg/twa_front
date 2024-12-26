@@ -53,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
             toast.add({ severity: 'success',summary:'Успешно', detail: 'Запрос на вывод отправлен', life: 3000 })
         }
         else {
-            toast.add({ severity: 'error',summary:'Ошибка', detail: 'Запрос на вывод не отправлен', life: 3000 })
+            toast.add({ severity: 'error',summary:'Ошибка', detail: 'Недостаточно средств на балансе', life: 3000 })
         }
 
     }
