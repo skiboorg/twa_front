@@ -38,7 +38,8 @@ const fetchTasks = async (filters)=>{
       <TaskSceleton  v-for="i in 5"/>
     </div>
     <div v-if="tasks.length>0" class="flex flex-col gap-3 items-start">
-      <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
+
+      <TaskCard v-for="task in tasks" :key="task.id" :task="task"  />
     </div>
 
   </div>
