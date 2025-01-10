@@ -1,14 +1,22 @@
 <script setup lang="ts">
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from 'primevue/usetoast';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ru';
+
 const route = useRoute()
 const taskStore = useTaskStore()
 const {loading} = storeToRefs(taskStore)
+const confirm = useConfirm();
+
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
 const {me} = authStore
 const {$api} = useNuxtApp()
-import { useToast } from 'primevue/usetoast';
+
 const toast = useToast()
-const {getTask, takeTask} = taskStore
+const {getTask, takeTask,rejectTask} = taskStore
 const task = ref({})
 const show_verify_form = ref(false)
 const send = ref(false)
@@ -16,9 +24,31 @@ const comment = ref(null)
 const files = ref([])
 const link = ref(null)
 const links = ref([])
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/ru';
+
+const confirmDialog = (event) => {
+
+  confirm.require({
+    target: event.currentTarget,
+    message: 'Вы точно хотите отказаться?',
+    icon: 'pi pi-info-circle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger'
+    },
+    accept: async () => {
+      const response = await rejectTask(route.params.id)
+      console.log(response)
+      navigateTo('/tasks/own')
+    },
+
+  });
+};
+
 
 dayjs.extend(relativeTime);
 dayjs.locale('ru');
@@ -146,6 +176,8 @@ const submitForm = async () => {
   <Button v-if="!user_have_is_task" class="mt-4" :loading="loading" fluid label="Откликнуться" @click="takeTask(task.id)"/>
   <div v-else>
     <Button v-if="!task.in_review" class="mt-4" severity="success" :loading="loading" fluid label="Сдать на проверку" @click="show_verify_form = true"/>
+    <Button  class="mt-4 mb-4" severity="danger" @click="confirmDialog($event)" :loading="loading" fluid label="Отказаться" />
+    <ConfirmPopup></ConfirmPopup>
   </div>
 
 

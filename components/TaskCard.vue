@@ -16,6 +16,7 @@ const formattedDate = dayjs(props.task.created_at).fromNow();
     <p class="text-gray-400 text-xs font-medium mb-3">{{formattedDate}}</p>
 
 
+
     <div class="flex items-center gap-3 mb-4">
       <div class="border rounded-xl px-3 py-2 grow">
         <p class="text-gray-400 font-medium text-xs mb-1">Цена</p>

@@ -26,7 +26,18 @@ export const useTaskStore = defineStore('task', () => {
         const { data } = await $api.post(`/api/task/take`,{id});
         await me()
         loading.value = false
-        toast.add({severity: 'info',life:3000, summary: 'Результат', detail:data.message})
+
+        toast.add({severity: data.success ? 'success' : 'error',life:3000, summary: 'Результат', detail:data.message})
+        navigateTo('/tasks/own')
+    }
+
+    const rejectTask = async (id) => {
+        loading.value = true
+        const { data } = await $api.post(`/api/task/reject`,{id});
+        await me()
+        loading.value = false
+
+        toast.add({severity: data.success ? 'success' : 'error',life:3000, summary: 'Результат', detail:data.message})
         navigateTo('/tasks/own')
     }
     const getTasks = async (filters) => {
@@ -47,7 +58,7 @@ export const useTaskStore = defineStore('task', () => {
     }
 
     return{
-        filters,loading,getFilters,getTasks,getTask,takeTask
+        filters,loading,getFilters,getTasks,getTask,takeTask,rejectTask
     }
 
 })
