@@ -3,11 +3,11 @@
 </script>
 
 <template>
-  <div class="h-[87vh] overflow-y-auto ">
+  <div class="h-svh overflow-y-auto ">
     <slot></slot>
   </div>
 
-  <Footer/>
+
   <Toast position="top-right"/>
 </template>
 

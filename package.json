@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.2.1",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "sass": "^1.74.1",
     "sass-loader": "^14.1.1",
     "typescript": "^5.4.3"

@@ -14,7 +14,7 @@ const pinEntered = async (pin)=>{
   const result = await login({tg_id:authData.value.tg_id, password:pin})
   if (result.success){
     await me()
-    navigateTo('/tasks')
+    navigateTo('/category')
   }else {
     is_loading.value = false
   }
@@ -25,7 +25,7 @@ const newPinEntered = async (pin)=>{
   await createPassword({tg_id:authData.value.tg_id, password:pin})
   const result = await login({tg_id:authData.value.tg_id, password:pin})
   if (result.success){
-    navigateTo('/tasks')
+    navigateTo('/category')
   }
 }
 

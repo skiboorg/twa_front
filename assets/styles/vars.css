@@ -10,6 +10,8 @@
     --p-accordion-header-active-background: trasparent !important;
     --p-accordion-header-hover-background: trasparent !important;
     --p-accordion-header-active-hover-background: trasparent !important;
+    --p-progressbar-value-background: #44E385 !important;
+    --p-galleria-inset-indicator-list-background : rgba(104, 104, 104, 0.16) !important;
 }
 
 .p-breadcrumb{
