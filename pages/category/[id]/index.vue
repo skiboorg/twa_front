@@ -47,14 +47,23 @@ const rateProduct = async (like) => {
   </div>
   <template v-if="category.filtered_product">
     <div class="container">
-      <div class="bg-white rounded-[10px] w-full h-[550px] flex flex-col items-center justify-center mb-3">
-        <Galleria :value="category.filtered_product.images" :numVisible="5" containerStyle="max-width: 640px" :showThumbnails="false"
-                  :showIndicators="true" :changeItemOnIndicatorHover="true" :showIndicatorsOnItem="false" :indicatorsPosition="'bottom'">
-          <template #item="slotProps">
-            <img class="w-full h-[340px] object-cover" :src="slotProps.item.file"   />
-          </template>
-        </Galleria>
-      </div>
+      <div class="bg-white rounded-[10px] w-full py-10  mb-3">
+        <swiper-container ref="containerRef"
+
+                          pagination-clickable="true"
+                          style="--swiper-pagination-color: white; --swiper-pagination-bottom: 10px;">
+          <swiper-slide
+              v-for="(img, idx) in category.filtered_product.images"
+              :key="idx"
+              style="background-color: rgb(32, 233, 70); color: white;"
+          >
+            <img class="w-full h-[340px] object-cover" :src="img.file"   />
+          </swiper-slide>
+        </swiper-container>
+
+        </div>
+
+
       <div class="p-6 bg-white rounded-[10px] ">
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-semibold">{{category.filtered_product.name}}</h2>
