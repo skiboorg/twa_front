@@ -7,6 +7,8 @@ const category = ref()
 const open = ref(false);
 const visible = ref(false);
 const loading = ref(false);
+const containerRef = ref();
+const swiper = useSwiper(containerRef)
 
 onBeforeMount(async ()=>{
   await fetchCategory()
@@ -49,13 +51,13 @@ const rateProduct = async (like) => {
     <div class="container">
       <div class="bg-white rounded-[10px] w-full py-10  mb-3">
         <swiper-container ref="containerRef"
-
+                          class="h-[400px]"
                           pagination-clickable="true"
-                          style="--swiper-pagination-color: white; --swiper-pagination-bottom: 10px;">
+                          style="--swiper-pagination-color: lime; --swiper-pagination-bottom: 0px;">
           <swiper-slide
               v-for="(img, idx) in category.filtered_product.images"
               :key="idx"
-              style="background-color: rgb(32, 233, 70); color: white;"
+              @click="swiper.next()"
           >
             <img class="w-full h-[340px] object-cover" :src="img.file"   />
           </swiper-slide>
@@ -68,16 +70,10 @@ const rateProduct = async (like) => {
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-semibold">{{category.filtered_product.name}}</h2>
           <button @click="open = !open" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                :class="['w-5 h-5 transform transition-transform duration-300', open ? 'rotate-180' : '']"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 17C12.2833 17 12.521 16.904 12.713 16.712C12.905 16.52 13.0007 16.2827 13 16V12C13 11.7167 12.904 11.4793 12.712 11.288C12.52 11.0967 12.2827 11.0007 12 11C11.7173 10.9993 11.48 11.0953 11.288 11.288C11.096 11.4807 11 11.718 11 12V16C11 16.2833 11.096 16.521 11.288 16.713C11.48 16.905 11.7173 17.0007 12 17ZM12 9C12.2833 9 12.521 8.904 12.713 8.712C12.905 8.52 13.0007 8.28267 13 8C12.9993 7.71733 12.9033 7.48 12.712 7.288C12.5207 7.096 12.2833 7 12 7C11.7167 7 11.4793 7.096 11.288 7.288C11.0967 7.48 11.0007 7.71733 11 8C10.9993 8.28267 11.0953 8.52033 11.288 8.713C11.4807 8.90567 11.718 9.00133 12 9ZM12 22C10.6167 22 9.31667 21.7373 8.1 21.212C6.88334 20.6867 5.825 19.9743 4.925 19.075C4.025 18.1757 3.31267 17.1173 2.788 15.9C2.26333 14.6827 2.00067 13.3827 2 12C1.99933 10.6173 2.262 9.31733 2.788 8.1C3.314 6.88267 4.02633 5.82433 4.925 4.925C5.82367 4.02567 6.882 3.31333 8.1 2.788C9.318 2.26267 10.618 2 12 2C13.382 2 14.682 2.26267 15.9 2.788C17.118 3.31333 18.1763 4.02567 19.075 4.925C19.9737 5.82433 20.6863 6.88267 21.213 8.1C21.7397 9.31733 22.002 10.6173 22 12C21.998 13.3827 21.7353 14.6827 21.212 15.9C20.6887 17.1173 19.9763 18.1757 19.075 19.075C18.1737 19.9743 17.1153 20.687 15.9 21.213C14.6847 21.739 13.3847 22.0013 12 22Z" fill="#B9B9B9"/>
             </svg>
+
           </button>
         </div>
         <p
