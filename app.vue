@@ -7,6 +7,11 @@ useHead({
     },
   ],
 });
+onMounted(() => {
+  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+    window.Telegram.WebApp.expand()
+  }
+})
 </script>
 
 <template>
