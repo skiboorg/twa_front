@@ -8,8 +8,17 @@ useHead({
   ],
 });
 onMounted(() => {
-  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-    window.Telegram.WebApp.expand()
+  const checkTelegramReady = () => {
+    if (window.Telegram?.WebApp?.expand) {
+      window.Telegram.WebApp.expand()
+    } else {
+      // Проверяем каждые 100ms, пока не появится WebApp
+      setTimeout(checkTelegramReady, 100)
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    checkTelegramReady()
   }
 })
 </script>
