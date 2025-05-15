@@ -82,6 +82,10 @@ const rateProduct = async (like) => {
         >
           {{category.filtered_product.description}}
         </p>
+        <div v-if="category.filtered_product.buttons" class="flex flex-wrap gap-3 mt-4">
+          <a class="inline-block bg-gray-900 text-white py-1 px-4 rounded-2xl" :href="btn.url" v-for="btn in category.filtered_product.buttons">{{btn.label}}</a>
+        </div>
+
       </div>
     </div>
     <div class="sticky bg-[#f7f7f7] z-50 bottom-[0px] p-3 flex items-center justify-between " :class="loading? 'disabled' : ''">
