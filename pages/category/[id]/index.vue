@@ -57,9 +57,28 @@ const rateProduct = async (like) => {
           <swiper-slide
               v-for="(img, idx) in category.filtered_product.images"
               :key="idx"
-              @click="swiper.next()"
+
           >
-            <img class="w-full h-[340px] object-cover" :src="img.file"   />
+<!--            @click="swiper.next()"-->
+<!--            <img class="w-full h-[340px] object-cover" :src="img.file"   />-->
+
+
+              <div class="card flex justify-center h-full">
+                <Image alt="Image" preview>
+                  <template #previewicon>
+                    <i class="pi pi-search"></i>
+                  </template>
+                  <template #image>
+                    <img class="w-full h-[340px] object-cover" :src="img.file" alt="image"  />
+                  </template>
+                  <template #preview="slotProps">
+                    <img :src="img.file" alt="preview" :style="slotProps.style" @click="slotProps.onClick" />
+                  </template>
+                </Image>
+              </div>
+
+
+<!--            <Image class="w-full h-[340px] object-cover" :src="img.file" alt="Image"  preview />-->
           </swiper-slide>
         </swiper-container>
 

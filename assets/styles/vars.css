@@ -12,6 +12,10 @@
     --p-accordion-header-active-hover-background: trasparent !important;
     --p-progressbar-value-background: #44E385 !important;
     --p-galleria-inset-indicator-list-background : rgba(104, 104, 104, 0.16) !important;
+    --p-image-preview-mask-background: trasparent !important;
+    --p-image-toolbar-padding :0 !important;
+    --p-image-toolbar-gap:0 !important;
+    --p-image-action-size: 40px !important;
 }
 
 .p-breadcrumb{
