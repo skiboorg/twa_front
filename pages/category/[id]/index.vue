@@ -8,13 +8,15 @@ const open = ref(false);
 const visible = ref(false);
 const loading = ref(false);
 const containerRef = ref();
-const result = ref('none');
+const can_record = ref(false);
+const is_recording = ref(false);
+const voiceFile = ref(false);
 const swiper = useSwiper(containerRef)
 
 onBeforeMount(async ()=>{
   await fetchCategory()
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    result.value = "Микрофон доступен";
+    can_record.value = true;
   }
 })
 
@@ -25,17 +27,65 @@ const fetchCategory = async () => {
 }
 
 const rateProduct = async (like) => {
-  loading.value = true
-  await productAction({
+  loading.value = true;
+
+  const body = {
     id: category.value.filtered_product.id,
     like,
-    comment:comment.value,
-  })
-  comment.value = null
-  await fetchCategory()
-  loading.value = false
+    comment: comment.value,
+    voice_message:null
+  };
+
+  // Добавим файл, если он выбран
+  if (voiceFile.value) {
+    body.voice_message = voiceFile.value; // File или Blob объект
+  }
+
+  await productAction(body);
+
+  comment.value = null;
+  voiceFile.value = null; // очистка файла после отправки (если нужно)
+  await fetchCategory();
+  loading.value = false;
+};
+
+let mediaRecorder = null
+let audioChunks = []
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    mediaRecorder = new MediaRecorder(stream)
+    audioChunks = []
+
+    mediaRecorder.ondataavailable = (e) => {
+      audioChunks.push(e.data)
+    }
+
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' })
+      const audioFile = new File([audioBlob], 'voice_message.webm', {
+        type: 'audio/webm',
+      })
+
+      // можно тут отправить на сервер или сохранить
+      console.log('Запись завершена', audioFile)
+      voiceFile.value = audioFile
+    }
+
+    mediaRecorder.start()
+    is_recording.value = true
+  } catch (err) {
+    console.error('Ошибка записи:', err)
+  }
 }
 
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop()
+    is_recording.value = false
+  }
+}
 
 
 </script>
@@ -120,9 +170,22 @@ const rateProduct = async (like) => {
         <path d="M37.9998 21C42.05 21 45.3332 24.3333 45.3332 29C45.3332 38.3333 35.3332 43.6667 31.9998 45.6667C28.6665 43.6667 18.6665 38.3333 18.6665 29C18.6665 24.3333 21.9998 21 25.9998 21C28.4798 21 30.6665 22.3333 31.9998 23.6667C33.3332 22.3333 35.5198 21 37.9998 21Z" fill="#44E385"/>
       </svg>
       <Dialog v-model:visible="visible" modal header="Ваш комментарий" :style="{ width: '25rem' }">
-        {{result}}
           <Textarea v-model="comment" class="mb-3" fluid autocomplete="off" />
-          <Button fluid type="button" rounded  label="Сохранить комментарий" severity="contrast" @click="visible = false"></Button>
+        <div class="flex gap-2">
+          <Button class="grow" type="button" rounded  label="Сохранить комментарий" severity="contrast" @click="visible = false"></Button>
+          <Button
+              v-if="can_record"
+              :severity="is_recording ? 'success' : 'contrast'"
+              icon="pi pi-microphone"
+              rounded
+              outlined
+              @mousedown="startRecording"
+              @mouseup="stopRecording"
+              @touchstart.prevent="startRecording"
+              @touchend.prevent="stopRecording"
+          />
+        </div>
+
 
       </Dialog>
     </div>
