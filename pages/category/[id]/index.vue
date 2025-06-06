@@ -170,6 +170,7 @@ function stopRecording() {
         <path d="M37.9998 21C42.05 21 45.3332 24.3333 45.3332 29C45.3332 38.3333 35.3332 43.6667 31.9998 45.6667C28.6665 43.6667 18.6665 38.3333 18.6665 29C18.6665 24.3333 21.9998 21 25.9998 21C28.4798 21 30.6665 22.3333 31.9998 23.6667C33.3332 22.3333 35.5198 21 37.9998 21Z" fill="#44E385"/>
       </svg>
       <Dialog v-model:visible="visible" modal header="Ваш комментарий" :style="{ width: '25rem' }">
+        <p v-if="is_recording" class="text-green-400 text-center">Запись включена.</p>
           <Textarea v-model="comment" class="mb-3" fluid autocomplete="off" />
         <div class="flex gap-2">
           <Button class="grow" type="button" rounded  label="Сохранить комментарий" severity="contrast" @click="visible = false"></Button>
